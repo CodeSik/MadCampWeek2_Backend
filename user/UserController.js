@@ -9,15 +9,29 @@ var User = require('./User');
 
 // User 생성
 router.post('/', function(req, res) {
-    User.create( {
-        id: req.body.id,
-        name: req.body.name,
-        },
-        function(err, user) {
-            if (err) return res.status(500).send("User 생성 실패.");
-            res.status(200).send(user);
-        });
+    User.exists({'id': req.body.id}, function (err, result) {
+        if (err) return res.status(500).send("User 조회 실패");
+        if (result) {
+            console.log(req.body.id)
+            console.log("User 존재")
+            return res.status(404).send("User 있음.");
+        }
+        if(!result){
+            console.log("User 존재 안해서 생성")
+            User.create( {
+                id: req.body.id,
+                name: req.body.name,
+                },
+                function(err, user) {
+                    if (err) return res.status(500).send("User 생성 실패.");
+                    res.status(200).send(user);
+                });
+            }
+            
+    })
 });
+
+
 
 // User 전체 조회
 router.get('/', function(req, res) {
@@ -67,4 +81,5 @@ router.put('/:id', function (req, res) {
         res.status(200).send(user);
     });
 });
+
 module.exports = router;

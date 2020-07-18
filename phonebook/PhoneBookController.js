@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended:true }));
 //router.get()
 var PhoneBook = require('./Phonebook');
+const Phonebook = require('./Phonebook');
 
 
 // PhoneBook 생성
@@ -13,16 +14,39 @@ router.post('/', function(req, res) {
     console.log(req.body.name)
     console.log(req.body.number)
     console.log(req.body.photoid)
-    PhoneBook.create( {
-        id: req.body.id,
-        name: req.body.name,
-        number: req.body.number,
-        photoid: req.body.photoid,
-        },
-        function(err, PhoneBook) {
-            if (err) return res.status(500).send("PhoneBook 생성 실패.");
-            res.status(200).send(PhoneBook);
-        });
+    PhoneBook.exists({'id': req.body.id, 'name':req.body.name, 'number': req.body.number}, function (err, result) {
+        if (err) return res.status(500).send("User 조회 실패");
+        if (result) {
+            console.log(req.body.id)
+            console.log("존재")
+            return res.status(404).send("User 있음.");
+        }
+        if(!result){
+             PhoneBook.create( {
+             id: req.body.id,
+             name: req.body.name,
+             number: req.body.number,
+             photoid: req.body.photoid,
+            },
+             function(err, PhoneBook) {
+                 if (err) return res.status(500).send("PhoneBook 생성 실패.");
+                 res.status(200).send(PhoneBook);
+             });
+        }
+    })
+});
+
+router.post('/upload', function(req, res) {
+             PhoneBook.create( {
+             id: req.body.id,
+             name: req.body.name,
+             number: req.body.number,
+             photoid: req.body.photoid,
+            },
+             function(err, PhoneBook) {
+                 if (err) return res.status(500).send("PhoneBook 생성 실패.");
+                 res.status(200).send(PhoneBook);
+             });
 });
 
 // PhoneBook 전체 조회
