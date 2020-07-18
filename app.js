@@ -1,10 +1,15 @@
 var express = require('express');
-var app = express();
+const app = express();
 var db= require('./db');
 
 
-var UserController = require('./user/UserController');  // 추가
-app.use('/users', UserController);  // 추가
+const UserController = require('./user/UserController');  // 추가
+const PhoneBookController = require('./phonebook/PhoneBookController')
+const GalleryController = require('./gallery/GalleryController')
 
+//라우팅
+app.use('/users', UserController);  // 추가
+app.use('/phonebook',PhoneBookController);
+app.use('/gallery',GalleryController);
 
 module.exports = app;
