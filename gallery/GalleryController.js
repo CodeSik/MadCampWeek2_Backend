@@ -19,7 +19,7 @@ router.use(bodyParser.urlencoded({ extended:true }));
 var Gallery = require('./Gallery');
 
 
-router.post('/img', upload.single('phone'), function (req, res) {
+router.post('/img', upload.single('photo'), function (req, res) {
       // req.files는 (String -> Array) 형태의 객체 입니다.
       // 필드명은 객체의 key에, 파일 정보는 배열로 value에 저장됩니다.
       //
@@ -27,17 +27,24 @@ router.post('/img', upload.single('phone'), function (req, res) {
       //  req.files['avatar'][0] -> File
       //  req.files['gallery'] -> Array
       //
-      // 텍스트 필드가 있는 경우, req.body가 이를 포함할 것입니다.    
-            res.json({result:1});
+      // 텍스트 필드가 있는 경우, req.body가 이를 포함할 것입니다.
+      console.log("get a file :" + req.body.id)    
+            res.status(200).json({result:1});
  })
 
 
 // Gallery 생성
-router.post('/', function(req, res) {
+router.post('/', upload.single('photo'), function(req, res) {
+    console.log("get a file :" + req.body.id)
+    console.log(upload.filename)
+    console.log(upload.single.filename)
+    console.log(upload.single('photo').file)
+    console.log(req.file.originalname)
+    var filename = req.file.originalname;
     Gallery.create( {
         id: req.body.id,
         photoid: req.body.photoid,
-        image: req.body.image,
+        image: "http://192.249.19.244:1180/uploads/"+filename,
         contents: req.body.contents,
         like : req.body.like
         },

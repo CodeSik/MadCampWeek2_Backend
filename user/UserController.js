@@ -1,14 +1,27 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var multer = require('multer');
+    var storage = multer.diskStorage({
+        destination: (req, file, callback)=>{
+            callback(null,"uploads/");
+        },
+        filename: (req,file,callback)=>{
+            callback(null,file.originalname);
+        }
+    });
+    //var upload = multer({dest: 'uploads/'})
+    var upload = multer({storage: storage});
 
 router.use(bodyParser.urlencoded({ extended:true }));
 //router.get()
 var User = require('./User');
 
 
-// User 생성
-router.post('/', function(req, res) {
+// User 최초 생성
+router.post('/',function(req, res) {
+    console.log(req.params.id);
+    console.log(req.body.id)
     User.exists({'id': req.body.id}, function (err, result) {
         if (err) return res.status(500).send("User 조회 실패");
         if (result) {
@@ -21,6 +34,9 @@ router.post('/', function(req, res) {
             User.create( {
                 id: req.body.id,
                 name: req.body.name,
+                follow: req.body.follow,
+                state: req.body.state,
+                photo: req.body.photo
                 },
                 function(err, user) {
                     if (err) return res.status(500).send("User 생성 실패.");

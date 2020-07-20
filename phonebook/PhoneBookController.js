@@ -1,15 +1,27 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var multer = require('multer');
+    var storage = multer.diskStorage({
+        destination: (req, file, callback)=>{
+            callback(null,"uploads/");
+        },
+        filename: (req,file,callback)=>{
+            callback(null,file.originalname);
+        }
+    });
+    //var upload = multer({dest: 'uploads/'})
+    var upload = multer({storage: storage});
+
 
 router.use(bodyParser.urlencoded({ extended:true }));
 //router.get()
 var PhoneBook = require('./Phonebook');
-const Phonebook = require('./Phonebook');
 
 
-// PhoneBook 생성
-router.post('/', function(req, res) {
+
+// PhoneBook 생성 (제일 처음 기본. 사진 업로드 할때는 바뀌게 할 예정)
+router.post('/' ,function(req, res) {
     console.log(req.body.id)
     console.log(req.body.name)
     console.log(req.body.number)
@@ -26,7 +38,7 @@ router.post('/', function(req, res) {
              id: req.body.id,
              name: req.body.name,
              number: req.body.number,
-             photoid: req.body.photoid,
+             photo: req.body.photo
             },
              function(err, PhoneBook) {
                  if (err) return res.status(500).send("PhoneBook 생성 실패.");
