@@ -84,7 +84,7 @@ router.get('/', function(req, res) {
 router.get('/:id', function(req, res) {
     //params는 url로 전달한 파라미터 이다.
     //body는 body로 전달한 것의 key값에 해당하는 값이다.
-
+    console.log("Get Phonebook")
     PhoneBook.find({'id': req.params.id}, function (err, PhoneBook) {
         if (err) return res.status(500).send("PhoneBook 조회 실패");
         if (!PhoneBook) return res.status(404).send("PhoneBook 없음.");

@@ -34,6 +34,7 @@ router.post('/',function(req, res) {
             User.create( {
                 id: req.body.id,
                 name: req.body.name,
+                number: req.body.number,
                 follow: req.body.follow,
                 state: req.body.state,
                 photo: req.body.photo

@@ -34,17 +34,12 @@ router.post('/img', upload.single('photo'), function (req, res) {
 
 
 // Gallery 생성
-router.post('/', upload.single('photo'), function(req, res) {
-    console.log("get a file :" + req.body.id)
-    console.log(upload.filename)
-    console.log(upload.single.filename)
-    console.log(upload.single('photo').file)
-    console.log(req.file.originalname)
-    var filename = req.file.originalname;
+router.post('/', function(req, res) {
+   
     Gallery.create( {
         id: req.body.id,
         photoid: req.body.photoid,
-        image: "http://192.249.19.244:1180/uploads/"+filename,
+        image: req.body.image,
         contents: req.body.contents,
         like : req.body.like
         },
